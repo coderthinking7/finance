@@ -11,7 +11,7 @@
         padding: 20px;
     }
     .container {
-        max-width: 600px;
+        max-width: 100%;
         margin: auto;
         background: #fff;
         padding: 20px;
@@ -30,14 +30,14 @@
         font-weight: bold;
         margin-bottom: 5px;
     }
-    input[type="text"], input[type="number"] {
+    input[type="text"], input[type="number"], input[type="file"], input[type="date"] {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
         box-sizing: border-box;
     }
-    input[type="submit"], button  {
+    input[type="submit"], button {
         background-color: #4CAF50;
         color: white;
         padding: 10px 20px;
@@ -62,7 +62,7 @@
     #detailForm table td {
         padding: 8px;
         border-bottom: 1px solid #ddd;
-        text-align: left;
+        text-align: center;
     }
     #detailForm table th {
         background-color: #f2f2f2;
@@ -71,15 +71,15 @@
 </head>
 <body>
     <div class="container" id="main">
-        <form id="loanForm">
-            <h2>MK Finance  </h2>
+        <form id="loanForm" method="post">
+            <h2>MK Finance Contract</h2>
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
             </div>
             <div class="form-group">
                 <label for="contact">Contact Number:</label>
-                <input type="number" id="contact" name="contact" required maxlength="10">
+                <input type="text" id="contact" name="contact" maxlength="10" minlength="10" required>
             </div>
             <div class="form-group">
                 <label for="address">Address:</label>
@@ -87,7 +87,7 @@
             </div>
             <div class="form-group">
                 <label for="pin">Pin Code:</label>
-                <input type="number" maxlength="6"  minlength="6" id="pin" name="pin" required>
+                <input type="text" id="pin" name="pin" maxlength="6" minlength="6" required>
             </div>
             <div class="form-group">
                 <label for="district">District:</label>
@@ -107,12 +107,28 @@
             </div>
             <div class="form-group">
                 <label for="interestRate">Interest Rate (%):</label>
-                <input type="number" id="interestRate" name="interestRate" required>
+                <input type="number" id="interestRate" name="interestRate" required step="0.01">
             </div>
             <div class="form-group">
                 <label for="loanDuration">Loan Duration (months):</label>
                 <input type="number" id="loanDuration" name="loanDuration" required>
             </div>
+        
+            <div class="form-group">
+                <label for="loanstart">Loan Start Date:</label>
+                <input type="date" id="loanstart" name="loanstart" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="loanend">Loan End Date:</label>
+                <input type="date" id="loanend" name="loanend" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="aadhar">Aadhar Number:</label>
+                <input type="text" id="aadhar" name="aadhar" maxlength="12" minlength="12" required>
+            </div>
+        
             <input type="submit" value="Calculate">
         </form>
     </div>
@@ -127,74 +143,147 @@
         </table>
 
         <div style="display: flex; justify-content: center;">
-            <button onclick="history.back()">Back</button>
+            <button onclick="history.back()">Back</button> 
             <button onclick="generatePDF()">Confirm Generate the Contract</button>
         </div>
-
-
     </div>
+  <script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
-    <script>
-        document.getElementById('loanForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            calculateLoan();
-        });
+    const loanDurationInput = document.getElementById('loanDuration');
+    const loanStartInput = document.getElementById('loanstart');
+    const loanEndInput = document.getElementById('loanend');
 
-        function calculateLoan() {
-            var name = document.getElementById('name').value;
-            var contact = document.getElementById('contact').value;
-            var address = document.getElementById('address').value;
-            var pin = document.getElementById('pin').value;
-            var district = document.getElementById('district').value;
-            var state = document.getElementById('state').value;
-            var postOffice = document.getElementById('postOffice').value;
-            var loanAmount = parseFloat(document.getElementById('loanAmount').value);
-            var interestRate = parseFloat(document.getElementById('interestRate').value);
-            var loanDuration = parseInt(document.getElementById('loanDuration').value);
+    // Event listener for loan start date change
+    loanStartInput.addEventListener('change', updateLoanEndDate);
 
-            var monthlyInterestRate = interestRate;
-            var monthlyPayment = (loanAmount * monthlyInterestRate) / 100;
-            var monthlyEMI = (loanAmount + (monthlyPayment * loanDuration)) / loanDuration;
-            var totalInterest = monthlyPayment * loanDuration;
-            var totalPayment = totalInterest + loanAmount;
+    // Event listener for loan duration change
+    loanDurationInput.addEventListener('input', updateLoanEndDate);
 
-            // Populate the loan details table
-            var loanDetailsTable = document.getElementById('loanDetails');
-            loanDetailsTable.innerHTML = ''; // Clear existing content
+    function updateLoanEndDate() {
+        const startDate = new Date(loanStartInput.value);
+        const duration = parseInt(loanDurationInput.value);
+        
+        if (!isNaN(startDate.getTime()) && !isNaN(duration)) {
+            const endDate = new Date(startDate);
+            endDate.setMonth(startDate.getMonth() + duration);
+            loanEndInput.value = endDate.toISOString().split('T')[0];
+        }
+    }
 
-            var details = {
-                "Name": name,
-                "Contact Number": contact,
-                "Address": address,
-                "Pin Code": pin,
-                "District": district,
-                "State": state,
-                "Post Office": postOffice,
-                "Loan Amount": loanAmount,
-                "Interest Rate (%)": interestRate,
-                "Loan Duration (months)": loanDuration,
-                "Monthly Interest Amount": monthlyPayment.toFixed(2),
-                "Monthly EMI": monthlyEMI.toFixed(2),
-                "Total Interest Amount": totalInterest.toFixed(2),
-                "Total Payable Amount": totalPayment.toFixed(2)
-            };
 
-            for (var key in details) {
-                if (details.hasOwnProperty(key)) {
-                    var row = loanDetailsTable.insertRow();
-                    var cell1 = row.insertCell(0);
-                    var cell2 = row.insertCell(1);
-                    cell1.textContent = key;
-                    cell2.textContent = details[key];
-                }
+
+    document.getElementById('loanForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        calculateLoan();
+    });
+
+    function calculateLoan() {
+        var name = document.getElementById('name').value;
+        var contact = document.getElementById('contact').value;
+        var address = document.getElementById('address').value;
+        var pin = document.getElementById('pin').value;
+        var district = document.getElementById('district').value;
+        var state = document.getElementById('state').value;
+        var postOffice = document.getElementById('postOffice').value;
+        var loanAmount = parseFloat(document.getElementById('loanAmount').value);
+        var interestRate = parseFloat(document.getElementById('interestRate').value);
+        var loanDuration = parseInt(document.getElementById('loanDuration').value);
+        var loanStart = document.getElementById('loanstart').value;
+        var loanEnd = document.getElementById('loanend').value;
+       
+        var aadhar = document.getElementById('aadhar').value;
+
+        var monthlyInterest = (loanAmount * interestRate) / 100;
+        var monthlyEMI = (loanAmount + (monthlyInterest * loanDuration)) / loanDuration;
+        var totalInterest = monthlyInterest * loanDuration;
+        var totalPayment = totalInterest + loanAmount;
+
+        var loanDetailsTable = document.getElementById('loanDetails');
+        loanDetailsTable.innerHTML = '';
+
+        var details = {
+            "Name": name,
+            "Contact Number": contact,
+            "Address": address,
+            "Pin Code": pin,
+            "District": district,
+            "State": state,
+            "Post Office": postOffice,
+            "Loan Amount": loanAmount,
+            "Interest Rate (%)": interestRate,
+            "Loan Duration (months)": loanDuration,
+            "Monthly Interest": monthlyInterest.toFixed(2),
+            "Monthly EMI": monthlyEMI.toFixed(2),
+            "Total Interest": totalInterest.toFixed(2),
+            "Total Payable Amount": totalPayment.toFixed(2),
+            "Loan Start Date": loanStart,
+            "Loan End Date": loanEnd,
+            "Aadhar Number": aadhar
+        };
+
+        for (var key in details) {
+            if (details.hasOwnProperty(key)) {
+                var row = loanDetailsTable.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                cell1.textContent = key;
+                cell2.textContent = details[key];
             }
-
-            // Hide the form and display the details
-            document.getElementById('main').style.display = 'none';
-            document.getElementById('detailForm').style.display = 'block';
         }
 
-    </script>
+        document.getElementById('main').style.display = 'none';
+        document.getElementById('detailForm').style.display = 'block';
+    }
+
+
+    function generatePDF() {
+        // Retrieve values from the form
+        var name = document.getElementById('name').value;
+        var contact = document.getElementById('contact').value;
+        var address = document.getElementById('address').value;
+        var pin = document.getElementById('pin').value;
+        var district = document.getElementById('district').value;
+        var state = document.getElementById('state').value;
+        var postOffice = document.getElementById('postOffice').value;
+        var loanAmount = parseFloat(document.getElementById('loanAmount').value);
+        var interestRate = parseFloat(document.getElementById('interestRate').value);
+        var loanDuration = parseInt(document.getElementById('loanDuration').value);
+        var loanStart = document.getElementById('loanstart').value;
+        var loanEnd = document.getElementById('loanend').value;
+      
+        var aadhar = document.getElementById('aadhar').value;
+
+        var monthlyInterest = (loanAmount * interestRate) / 100;
+        var monthlyEMI = (loanAmount + (monthlyInterest * loanDuration)) / loanDuration;
+        var totalInterest = monthlyInterest * loanDuration;
+        var totalPayment = totalInterest + loanAmount;
+
+        // Redirect to the next page with the form data
+        var nextPageURL = 'bil.html?name=' + encodeURIComponent(name) +
+            '&contact=' + encodeURIComponent(contact) +
+            '&address=' + encodeURIComponent(address) +
+            '&pin=' + encodeURIComponent(pin) +
+            '&district=' + encodeURIComponent(district) +
+            '&state=' + encodeURIComponent(state) +
+            '&postOffice=' + encodeURIComponent(postOffice) +
+            '&loanAmount=' + encodeURIComponent(loanAmount) +
+            '&interestRate=' + encodeURIComponent(interestRate) +
+            '&loanDuration=' + encodeURIComponent(loanDuration) +
+            '&loanstart=' + encodeURIComponent(loanStart) +
+            '&loanend=' + encodeURIComponent(loanEnd) +
+
+            '&aadhar=' + encodeURIComponent(aadhar) +
+            '&monthlyInterest=' + encodeURIComponent(monthlyInterest.toFixed(2)) +
+            '&monthlyEMI=' + encodeURIComponent(monthlyEMI.toFixed(2)) +
+            '&totalInterest=' + encodeURIComponent(totalInterest.toFixed(2)) +
+            '&totalPayment=' + encodeURIComponent(totalPayment.toFixed(2));
+
+        window.location.href = nextPageURL;
+    }
+
+
+
+
+  </script>
 </body>
 </html>

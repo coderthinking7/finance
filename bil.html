@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="widtd=device-widtd, initial-scale=1.0">
-    <title>Document</title>
+    <title></title>
 </head>
 <body>
     <style>
+
+        body{
+            padding: 0px;
+            margin: 0px;
+            
+        }
+
+      
+
         .container{
-            /* border: solid black 3px; */
-            margin: 15px;
-            width: 800px;
-            height:1100px ;
+            border: solid black 3px;
+            margin: 5px;
+            padding: 10px;
+            width: 700px;
+            height:950px ;
             font-weight: bolder;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             text-transform: capitalize;
@@ -66,7 +76,7 @@
 
         table, td, th {
             border: 1px solid;
-            height: 60px;
+            height: 50px;
             font-size: 20px;
         }
 
@@ -79,7 +89,7 @@
 
               p{
                 font-size: 18px;
-               padding-top: 15px;
+               padding-top: 5px;
               }
 
               h3{
@@ -88,6 +98,16 @@
                 text-decoration: underline;
               }
 
+              
+
+              @media print {
+           #print{
+            display: none;
+           }
+           #printdiv{
+            display: none;
+           }
+        }  
         
 
        
@@ -122,35 +142,35 @@
                 <tr>
                     <td>1</td>
                     <td>TOTAL LOAN AMOUNT</td>
-                    <td>50000</td>
+                    <td id="loanAmount"></td>
                 </tr>
                 <tr>
                     <td>2</td>
                     <td>INTEREST RATE</td>
-                    <td>4%</td>
+                    <td id="interestRate"></td>
                 </tr>
                 <tr>
                     <td>3</td>
                     <td>TOTAL MONTH INTEREST</td>
-                    <td>2000</td>
+                    <td id="monthlyInterest"></td>
                 </tr>
 
                 <tr>
                     <td>4</td>
                     <td>TOTAL MONTHLY EMI </td>
-                    <td>4777</td>
+                    <td id="monthlyEMI"></td>
                 </tr>
 
                 <tr>
                     <td>5</td>
                     <td>TOTAL INTEREST OF LOAN AMOUNT</td>
-                    <td>36000</td>
+                    <td id="totalInterest"></td>
                 </tr>
 
                 <tr>
                     <td>6</td>
                     <td>TOTAL AMOUNT TO PAY</td>
-                    <td>86000</td>
+                    <td id="totalPayment"></td>
                 </tr>
 
                 <tr>
@@ -163,7 +183,7 @@
                 <tr>
                     <td>8</td>
                     <td>DURATION OF LOAN</td>
-                    <td>18th Months</td>
+                    <td id="loanDuration"></td>
                 </tr>
 
               
@@ -177,7 +197,7 @@ repayment schedules, fees, and other important details that can significantly
 impact your financial obligations. Make informed decisions by carefully
 reviewing the entire loan agreement and seeking professional advice if
 needed.
-<br><br><br>
+<br><br><br><br><br>
 
 <span style="float: left;">rohit</span>
 <span style="float: right;">mk Finance</span>
@@ -202,17 +222,22 @@ needed.
                 padding: 0px;
                 margin: 10px;
                 font-weight:600;
+                width: 100%;
             }
 
             #p2 span{
                color: red;
-               text-decoration: underline;
-            }
-
+            
+        }
           
 
             h3{
                 margin:0px ;
+            }
+
+            #p2{
+                padding: 10px;
+                margin: 0px 30px;
             }
            </style>
 
@@ -227,11 +252,23 @@ needed.
         <div class="inbox" id="p2">
 
             <p>
-                This Loan Agreement is made and entered into this <span> Date </span>  by and between MK Finance
+                This Loan Agreement is made and entered into this <span id="loanstart"> </span> by and between MK Finance
 with a principal place of business at <span>Chakhani Dhukhi Mishra , Tamkuhi Raj
-    ,Kushinagar , UP – 274406</span>  and <span>Shivraji Devi ,Address proof Aadhar Card No. 3960 4006
-        4443 residing at W/O Ramdev Chakhani Dhukhi Mishra , Tamkuhi Raj , Kushinagar , UP
-        – 274406</span>  </p>
+    ,Kushinagar , UP – 274406</span>  and 
+    <span id="name"></span> at 
+    <span id="address"></span>,P/O
+    <span id="postOffice"></span>,
+    <span id="district"></span>,
+    <span id="state"></span>,
+    <span id="pin"></span>
+    
+
+
+
+
+</p>
+
+        <p>Address proof Aadhar Card No. <span id="aadhar"> </span> </p>
 
 
             <p>
@@ -242,14 +279,14 @@ provide a loan subject to the terms and conditions set forth herein.
             <p>NOW, THEREFORE, in consideration of the mutual promises and covenants contained
                 herein, the parties agree as follows:
                 </p>
-            <p>1. Loan Amount: The Lender agrees to lend the Borrower the amount of  <span> 50,000</span> Rupees
+            <p>1. Loan Amount: The Lender agrees to lend the Borrower the amount of  <span id="loanAmount1"></span> Rupees
                 to be disbursed in full on the Effective Date.</p>
-            <p>2. Interest Rate: The Loan shall accrue interest at a rate of <span> 4% </span>per Month, calculated on
+            <p>2. Interest Rate: The Loan shall accrue interest at a rate of <span id="interestRate1">  </span> per Month, calculated on
                 the outstanding principal balance. Interest shall be calculated and payable monthly.
                 </p>
-            <p>3. Repayment Terms: The Borrower shall repay the Loan in <span>18</span> equal monthly
-                installments of <span>4777</span> Rupees commencing on <span> [Start Date]</span>. The final installment shall
-                be due on  <span>[End Date]</span>. The Borrower shall make all payments in the form of
+            <p>3. Repayment Terms: The Borrower shall repay the Loan in <span id="loanDuration1"></span> equal monthly
+                installments of <span id="monthlyEMI1"></span> Rupees commencing on <span id="loanstart1"> </span>. The final installment shall
+                be due on  <span id="loanend"></span>. The Borrower shall make all payments in the form of
                 Cash/cheque/Bank Transfer to the Lender.</p>
             <p>4. Late Payment: In the event of a late payment, the Borrower shall be responsible for a
                 late fee of 100 rupees of the overdue amount, whichever is higher. Additionally, late
@@ -267,17 +304,85 @@ or oral, relating to the subject matter herein
             <p>IN WITNESS WHEREOF, the parties hereto have executed this Loan Agreement as of
                 the Effective Date.</p>
 
-
+<br>
+<br>
             
-
+                <span style="float: left;color: black; text-decoration: none;" id="name1"></span>
+                <span style="float: right;color: black; text-decoration: none">mk Finance</span>
 
 
             
         </div>
 
+        
+
+
 
     </div>
 
+    <div id="printdiv" style="
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+        padding: 50px 0px 100px 0px ; 
+        ">
 
+            <button onclick="window.print()" id="print"  style="background-color: green;color: white;padding: 20px 40px ;font-size: 25px;">
+                Print this page
+            </button>
+        </div>
+
+
+ 
+    
+    
+    <script>
+        // Extract query parameters from URL
+        var urlParams = new URLSearchParams(window.location.search);
+        // Get form data from query parameters
+        var name = urlParams.get('name');
+        var address = urlParams.get('address');
+        var pin = urlParams.get('pin');
+        var district = urlParams.get('district');
+        var state = urlParams.get('state');
+        var postOffice = urlParams.get('postOffice');
+        var loanAmount = urlParams.get('loanAmount');
+        var interestRate = urlParams.get('interestRate');
+        var monthlyInterest = urlParams.get('monthlyInterest');
+        var monthlyEMI = urlParams.get('monthlyEMI');
+        var totalInterest = urlParams.get('totalInterest');
+        var totalPayment = urlParams.get('totalPayment');
+        var loanDuration = urlParams.get('loanDuration');
+        var loanstart = urlParams.get('loanstart');
+        var loanend = urlParams.get('loanend');
+        var aadhar = urlParams.get('aadhar');
+        
+
+        // Display form data on the page
+        document.getElementById('name').innerText = name;
+        document.getElementById('name1').innerText = name;
+        document.getElementById('address').innerText = address;
+        document.getElementById('pin').innerText = pin;
+        document.getElementById('district').innerText = district;
+        document.getElementById('state').innerText = state;
+        document.getElementById('postOffice').innerText = postOffice;
+        document.getElementById('loanAmount').innerText = loanAmount;
+        document.getElementById('loanAmount1').innerText = loanAmount;
+        document.getElementById('interestRate').innerText = interestRate;
+        document.getElementById('interestRate1').innerText = interestRate+"%";
+        document.getElementById('monthlyInterest').innerText = monthlyInterest;
+        document.getElementById('monthlyEMI').innerText = monthlyEMI;
+        document.getElementById('monthlyEMI1').innerText = monthlyEMI;
+        document.getElementById('totalInterest').innerText = totalInterest;
+        document.getElementById('totalPayment').innerText = totalPayment;
+        document.getElementById('loanDuration').innerText = loanDuration+"th";
+        document.getElementById('loanDuration1').innerText = loanDuration+"th";
+        document.getElementById('loanstart').innerText = loanstart;
+        document.getElementById('loanstart1').innerText = loanstart;
+        document.getElementById('loanend').innerText = loanend;
+        document.getElementById('aadhar').innerText = aadhar;
+    </script>
+
+    
 </body>
 </html>
